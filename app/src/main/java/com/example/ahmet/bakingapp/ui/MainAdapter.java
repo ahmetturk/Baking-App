@@ -50,7 +50,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainAdapterVie
         }
 
         public void bind(Recipe recipe) {
-            binding.recipeName.setText(recipe.getName());
+            binding.setRecipe(recipe);
         }
     }
 }

@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import com.example.ahmet.bakingapp.R;
 import com.example.ahmet.bakingapp.databinding.ActivityMainBinding;
 import com.example.ahmet.bakingapp.model.Recipe;
+import com.example.ahmet.bakingapp.utils.VerticalItemDecoration;
 import com.example.ahmet.bakingapp.viewmodel.MainViewModel;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         binding.recipesRecyclerView.setLayoutManager(layoutManager);
         binding.recipesRecyclerView.setHasFixedSize(true);
+        binding.recipesRecyclerView.addItemDecoration(new VerticalItemDecoration(this));
 
         mAdapter = new MainAdapter();
         binding.recipesRecyclerView.setAdapter(mAdapter);
