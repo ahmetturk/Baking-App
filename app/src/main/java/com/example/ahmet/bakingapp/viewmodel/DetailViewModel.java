@@ -10,12 +10,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class MainViewModel extends ViewModel {
-    private LiveData<List<Recipe>> recipes;
+public class DetailViewModel extends ViewModel {
     private final Repository repository;
+    private LiveData<List<Recipe>> recipes;
 
     @Inject
-    public MainViewModel(Repository repository) {
+    DetailViewModel(Repository repository) {
         this.repository = repository;
     }
 

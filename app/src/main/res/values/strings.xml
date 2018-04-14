@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">BakingApp</string>
 
-    <string name="serving_count">%1$d servings</string>
+    <plurals name="serving_count">
+        <item quantity="zero">%1$d servings</item>
+        <item quantity="one">%1$d serving</item>
+        <item quantity="other">%1$d servings</item>
+    </plurals>
 </resources>

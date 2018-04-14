@@ -2,7 +2,6 @@ package com.example.ahmet.bakingapp.repository;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.util.Log;
 
 import com.example.ahmet.bakingapp.api.WebService;
 import com.example.ahmet.bakingapp.model.Recipe;
@@ -20,6 +19,7 @@ import retrofit2.Response;
 public class Repository {
 
     private final WebService webService;
+    private MutableLiveData<List<Recipe>> data;
 
     @Inject
     Repository(WebService webService) {
@@ -27,22 +27,21 @@ public class Repository {
     }
 
     public LiveData<List<Recipe>> getRecipes() {
+        if (data == null) {
+            data = new MutableLiveData<>();
 
-        final MutableLiveData<List<Recipe>> data = new MutableLiveData<>();
+            webService.getRecipes().enqueue(new Callback<List<Recipe>>() {
+                @Override
+                public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+                    data.setValue(response.body());
+                }
 
-        webService.getRecipes().enqueue(new Callback<List<Recipe>>() {
-            @Override
-            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                data.setValue(response.body());
-                Log.d("ahmetnormal", response.message());
-            }
-
-            @Override
-            public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                // TODO Failure
-                Log.d("ahmethata", t.getMessage());
-            }
-        });
+                @Override
+                public void onFailure(Call<List<Recipe>> call, Throwable t) {
+                    // TODO Failure
+                }
+            });
+        }
 
         return data;
     }

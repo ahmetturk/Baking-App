@@ -3,11 +3,11 @@ package com.example.ahmet.bakingapp.ui;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 
 import com.example.ahmet.bakingapp.R;
 import com.example.ahmet.bakingapp.databinding.ActivityMainBinding;
@@ -21,7 +21,9 @@ import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
 
-public class MainActivity extends AppCompatActivity {
+import static com.example.ahmet.bakingapp.ui.DetailActivity.INTENT_RECIPE_ID;
+
+public class MainActivity extends AppCompatActivity implements RecipeClickCallback {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -34,13 +36,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        binding.recipesRecyclerView.setLayoutManager(layoutManager);
         binding.recipesRecyclerView.setHasFixedSize(true);
         binding.recipesRecyclerView.addItemDecoration(new VerticalItemDecoration(this));
 
-        mAdapter = new MainAdapter();
+        mAdapter = new MainAdapter(this);
         binding.recipesRecyclerView.setAdapter(mAdapter);
 
         MainViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
@@ -50,5 +49,12 @@ public class MainActivity extends AppCompatActivity {
                 mAdapter.setList(recipes);
             }
         });
+    }
+
+    @Override
+    public void onClick(Recipe recipe) {
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(INTENT_RECIPE_ID, recipe.getId());
+        startActivity(intent);
     }
 }
