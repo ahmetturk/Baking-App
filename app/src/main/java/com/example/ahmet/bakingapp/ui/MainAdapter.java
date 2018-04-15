@@ -16,9 +16,9 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainAdapterVie
 
     private List<Recipe> mList;
 
-    private final RecipeClickCallback mRecipeClickCallback;
+    private final ClickCallback<Recipe> mRecipeClickCallback;
 
-    MainAdapter(RecipeClickCallback clickCallback) {
+    MainAdapter(ClickCallback<Recipe> clickCallback) {
         mRecipeClickCallback = clickCallback;
     }
 

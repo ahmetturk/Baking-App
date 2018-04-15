@@ -23,7 +23,7 @@ import dagger.android.AndroidInjection;
 
 import static com.example.ahmet.bakingapp.ui.DetailActivity.INTENT_RECIPE_ID;
 
-public class MainActivity extends AppCompatActivity implements RecipeClickCallback {
+public class MainActivity extends AppCompatActivity implements ClickCallback<Recipe> {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -36,11 +36,11 @@ public class MainActivity extends AppCompatActivity implements RecipeClickCallba
         super.onCreate(savedInstanceState);
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        binding.recipesRecyclerView.setHasFixedSize(true);
-        binding.recipesRecyclerView.addItemDecoration(new VerticalItemDecoration(this));
+        binding.recipesList.setHasFixedSize(true);
+        binding.recipesList.addItemDecoration(new VerticalItemDecoration(this));
 
         mAdapter = new MainAdapter(this);
-        binding.recipesRecyclerView.setAdapter(mAdapter);
+        binding.recipesList.setAdapter(mAdapter);
 
         MainViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
         viewModel.getRecipes().observe(this, new Observer<List<Recipe>>() {

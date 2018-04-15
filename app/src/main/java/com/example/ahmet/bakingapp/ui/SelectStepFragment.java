@@ -32,8 +32,8 @@ public class SelectStepFragment extends Fragment {
 
     private FragmentSelectStepBinding mBinding;
 
-    private int mRecipeId;
-    private Recipe mRecipe;
+    private IngredientAdapter ingredientAdapter;
+    private StepAdapter stepAdapter;
 
     public static SelectStepFragment forRecipe(int recipeId) {
         SelectStepFragment fragment = new SelectStepFragment();
@@ -54,6 +54,18 @@ public class SelectStepFragment extends Fragment {
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_select_step, container, false);
 
+        mBinding.ingredientsList.setHasFixedSize(true);
+        mBinding.ingredientsList.setNestedScrollingEnabled(false);
+
+        mBinding.stepsList.setHasFixedSize(true);
+        mBinding.stepsList.setNestedScrollingEnabled(false);
+
+        ingredientAdapter = new IngredientAdapter();
+        mBinding.ingredientsList.setAdapter(ingredientAdapter);
+
+        stepAdapter = new StepAdapter();
+        mBinding.stepsList.setAdapter(stepAdapter);
+
         return mBinding.getRoot();
     }
 
@@ -61,21 +73,22 @@ public class SelectStepFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mRecipeId = getArguments().getInt(KEY_RECIPE_ID) - 1;
+        final int recipeId = getArguments().getInt(KEY_RECIPE_ID) - 1;
 
-        DetailViewModel viewModel = ViewModelProviders.of(getActivity(), viewModelFactory).get(DetailViewModel.class);
+        DetailViewModel viewModel =
+                ViewModelProviders.of(getActivity(), viewModelFactory).get(DetailViewModel.class);
         viewModel.getRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {
                 if (recipes != null) {
-                    mRecipe = recipes.get(mRecipeId);
-                    populateViews();
+                    populateViews(recipes.get(recipeId));
                 }
             }
         });
     }
 
-    private void populateViews() {
-        mBinding.recipeName.setText(mRecipe.getName());
+    private void populateViews(Recipe recipe) {
+        ingredientAdapter.setList(recipe.getIngredients());
+        stepAdapter.setList(recipe.getSteps());
     }
 }

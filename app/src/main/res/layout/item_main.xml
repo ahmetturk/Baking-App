@@ -11,7 +11,7 @@
 
         <variable
             name="callback"
-            type="com.example.ahmet.bakingapp.ui.RecipeClickCallback" />
+            type="com.example.ahmet.bakingapp.ui.ClickCallback" />
     </data>
 
     <android.support.v7.widget.CardView
@@ -35,34 +35,45 @@
                 android:id="@+id/recipe_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_normal"
-                android:layout_marginEnd="@dimen/margin_normal"
-                android:layout_marginLeft="@dimen/margin_normal"
-                android:layout_marginRight="@dimen/margin_normal"
-                android:layout_marginStart="@dimen/margin_normal"
-                android:layout_marginTop="@dimen/margin_normal"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
                 android:text="@{recipe.getName()}"
                 android:textColor="@color/main_item_text_color"
                 android:textSize="40sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_bias="0.482"
+                app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recipe_image"
                 tools:text="Nutella Pie" />
 
             <TextView
                 android:id="@+id/serving_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_normal"
-                android:layout_marginRight="@dimen/margin_normal"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
                 android:text="@{@plurals/serving_count(recipe.getServings(), recipe.getServings())}"
                 android:textColor="@color/main_item_text_color"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recipe_name"
+                app:layout_constraintTop_toBottomOf="@+id/recipe_image"
                 tools:text="8 servings" />
+
+            <ImageView
+                android:id="@+id/recipe_image"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:contentDescription="@string/recipe_image_cd"
+                android:src="@drawable/placeholder"
+                app:layout_constraintDimensionRatio="H,16:9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.CardView>

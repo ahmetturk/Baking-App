@@ -2,7 +2,9 @@
 <resources>
     <color name="colorPrimary">#039be5</color>
     <color name="colorPrimaryDark">#006db3</color>
-    <color name="colorAccent">#ccff90</color>
+    <color name="colorAccent">#63ccff</color>
 
-    <color name="main_item_text_color">#505050</color>
+    <color name="main_item_text_color">#404040</color>
+    <color name="ingredient_item_text_color">#404040</color>
+    <color name="step_item_text_color">#404040</color>
 </resources>
