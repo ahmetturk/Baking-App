@@ -98,6 +98,8 @@ public class ViewStepFragment extends Fragment {
     }
 
     private void populateViews(Step step) {
+        mBinding.setStep(step);
+
         String videoUrl = step.getVideoURL();
         if (videoUrl.isEmpty()) {
             videoUrl = step.getThumbnailURL();
