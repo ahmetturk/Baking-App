@@ -8,6 +8,6 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface WebService {
-    @GET("android-baking-app-json")
+    @GET("baking.json")
     Call<List<Recipe>> getRecipes();
 }

@@ -6,7 +6,7 @@ import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 
 @Module
-abstract class DetailActivityModule {
+public abstract class DetailActivityModule {
     @ContributesAndroidInjector(modules = DetailFragmentsModule.class)
     abstract DetailActivity contributeDetailActivity();
 }

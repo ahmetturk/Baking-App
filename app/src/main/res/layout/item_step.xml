@@ -6,13 +6,18 @@
     <data>
 
         <variable
+            name="callback"
+            type="com.example.ahmet.bakingapp.ui.ClickCallback" />
+
+        <variable
             name="step"
             type="com.example.ahmet.bakingapp.model.Step" />
     </data>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> callback.onClick(step)}">
 
         <TextView
             android:id="@+id/shortDescriptionTv"

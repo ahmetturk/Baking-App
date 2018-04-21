@@ -15,6 +15,11 @@ import java.util.List;
 public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepAdapterViewHolder> {
 
     private List<Step> mList;
+    private ClickCallback<Step> callback;
+
+    public StepAdapter(ClickCallback<Step> callback) {
+        this.callback = callback;
+    }
 
     @NonNull
     @Override
@@ -54,6 +59,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepAdapterVie
 
         void bind(Step step) {
             binding.setStep(step);
+            binding.setCallback(callback);
         }
     }
 }

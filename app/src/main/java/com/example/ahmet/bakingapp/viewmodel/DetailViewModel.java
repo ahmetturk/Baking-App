@@ -13,6 +13,7 @@ import javax.inject.Inject;
 public class DetailViewModel extends ViewModel {
     private final Repository repository;
     private LiveData<List<Recipe>> recipes;
+    private int recipeId;
 
     @Inject
     DetailViewModel(Repository repository) {
@@ -25,5 +26,13 @@ public class DetailViewModel extends ViewModel {
         }
 
         return recipes;
+    }
+
+    public int getRecipeId() {
+        return this.recipeId;
+    }
+
+    public void setRecipeId(int recipeId) {
+        this.recipeId = recipeId;
     }
 }

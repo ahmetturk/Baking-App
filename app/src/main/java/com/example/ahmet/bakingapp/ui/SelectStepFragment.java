@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.example.ahmet.bakingapp.R;
 import com.example.ahmet.bakingapp.databinding.FragmentSelectStepBinding;
 import com.example.ahmet.bakingapp.model.Recipe;
+import com.example.ahmet.bakingapp.model.Step;
 import com.example.ahmet.bakingapp.viewmodel.DetailViewModel;
 
 import java.util.List;
@@ -52,7 +53,8 @@ public class SelectStepFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_select_step, container, false);
+        mBinding = DataBindingUtil.
+                inflate(inflater, R.layout.fragment_select_step, container, false);
 
         mBinding.ingredientsList.setHasFixedSize(true);
         mBinding.ingredientsList.setNestedScrollingEnabled(false);
@@ -60,23 +62,25 @@ public class SelectStepFragment extends Fragment {
         mBinding.stepsList.setHasFixedSize(true);
         mBinding.stepsList.setNestedScrollingEnabled(false);
 
-        ingredientAdapter = new IngredientAdapter();
-        mBinding.ingredientsList.setAdapter(ingredientAdapter);
-
-        stepAdapter = new StepAdapter();
-        mBinding.stepsList.setAdapter(stepAdapter);
-
         return mBinding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         final int recipeId = getArguments().getInt(KEY_RECIPE_ID) - 1;
+
+        ingredientAdapter = new IngredientAdapter();
+        mBinding.ingredientsList.setAdapter(ingredientAdapter);
+
+        stepAdapter = new StepAdapter((ClickCallback<Step>) getActivity());
+        mBinding.stepsList.setAdapter(stepAdapter);
 
         DetailViewModel viewModel =
                 ViewModelProviders.of(getActivity(), viewModelFactory).get(DetailViewModel.class);
+
+        viewModel.setRecipeId(recipeId);
+
         viewModel.getRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {
