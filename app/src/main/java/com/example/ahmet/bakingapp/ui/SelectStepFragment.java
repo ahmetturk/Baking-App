@@ -92,6 +92,8 @@ public class SelectStepFragment extends Fragment {
     }
 
     private void populateViews(Recipe recipe) {
+        getActivity().setTitle(recipe.getName());
+
         ingredientAdapter.setList(recipe.getIngredients());
         stepAdapter.setList(recipe.getSteps());
     }
