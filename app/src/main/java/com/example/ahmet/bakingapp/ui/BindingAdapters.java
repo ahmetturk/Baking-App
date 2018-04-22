@@ -1,6 +1,7 @@
 package com.example.ahmet.bakingapp.ui;
 
 import android.databinding.BindingAdapter;
+import android.view.View;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;

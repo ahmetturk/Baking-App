@@ -8,6 +8,10 @@
         <variable
             name="step"
             type="com.example.ahmet.bakingapp.model.Step" />
+
+        <variable
+            name="callback"
+            type="com.example.ahmet.bakingapp.ui.ViewStepFragment" />
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -40,7 +44,8 @@
         <TextView
             android:id="@+id/fragment_view_step_textview_desription"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/margin_small"
             android:layout_marginEnd="@dimen/margin_normal"
             android:layout_marginLeft="@dimen/margin_normal"
             android:layout_marginRight="@dimen/margin_normal"
@@ -48,10 +53,36 @@
             android:layout_marginTop="@dimen/margin_small"
             android:text="@{step.getDescription()}"
             android:textColor="@color/fragment_view_step_description"
+            app:layout_constraintBottom_toTopOf="@+id/fragment_view_step_button_previous"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fragment_view_step_textview_short_desription"
             tools:text="2. Whisk the graham cracker crumbs, 50 grams (1/4 cup) of sugar, and 1/2 teaspoon of salt together in a medium bowl. Pour the melted butter and 1 teaspoon of vanilla into the dry ingredients and stir together until evenly mixed." />
+
+        <Button
+            android:id="@+id/fragment_view_step_button_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_normal"
+            android:onClick="@{() -> callback.onClickNext()}"
+            android:text="@string/fragment_view_step_button_next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/fragment_view_step_button_previous" />
+
+        <Button
+            android:id="@+id/fragment_view_step_button_previous"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_normal"
+            android:onClick="@{() -> callback.onClickPrevious()}"
+            android:text="@string/fragment_view_step_button_previous"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/fragment_view_step_button_next"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

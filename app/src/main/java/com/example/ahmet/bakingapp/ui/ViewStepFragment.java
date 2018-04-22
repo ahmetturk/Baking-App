@@ -46,8 +46,10 @@ public class ViewStepFragment extends Fragment {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
-    private FragmentViewStepBinding mBinding;
-    private SimpleExoPlayer mExoPlayer;
+    private FragmentViewStepBinding binding;
+    private DetailViewModel viewModel;
+    private SimpleExoPlayer exoPlayer;
+    private int totalStepCount;
 
     public static ViewStepFragment forStep(int stepId) {
         ViewStepFragment fragment = new ViewStepFragment();
@@ -66,10 +68,12 @@ public class ViewStepFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.
+        binding = DataBindingUtil.
                 inflate(inflater, R.layout.fragment_view_step, container, false);
 
-        return mBinding.getRoot();
+        binding.setCallback(this);
+
+        return binding.getRoot();
     }
 
     @Override
@@ -77,18 +81,17 @@ public class ViewStepFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         final int stepId = getArguments().getInt(KEY_STEP_ID);
 
-        DetailViewModel viewModel =
-                ViewModelProviders.of(getActivity(), viewModelFactory).get(DetailViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity(), viewModelFactory).get(DetailViewModel.class);
+        viewModel.setStepId(stepId);
 
-        final int recipeId = viewModel.getRecipeId();
+        totalStepCount = viewModel.getTotalStepCount();
 
-        viewModel.getRecipes().observe(this, new Observer<List<Recipe>>() {
+        viewModel.getStep().observe(this, new Observer<Step>() {
             @Override
-            public void onChanged(@Nullable List<Recipe> recipes) {
-                populateViews(recipes.get(recipeId).getSteps().get(stepId));
+            public void onChanged(@Nullable Step step) {
+                populateViews(step);
             }
         });
-
     }
 
     @Override
@@ -97,8 +100,16 @@ public class ViewStepFragment extends Fragment {
         releasePlayer();
     }
 
+    public void onClickNext() {
+        viewModel.nextStepId();
+    }
+
+    public void onClickPrevious() {
+        viewModel.previousStepId();
+    }
+
     private void populateViews(Step step) {
-        mBinding.setStep(step);
+        binding.setStep(step);
 
         String videoUrl = step.getVideoURL();
         if (videoUrl.isEmpty()) {
@@ -108,33 +119,45 @@ public class ViewStepFragment extends Fragment {
         if (!videoUrl.isEmpty()) {
             initializePlayer(Uri.parse(videoUrl));
         }
+
+        if (step.getId() == totalStepCount - 1) {
+            binding.fragmentViewStepButtonNext.setVisibility(View.GONE);
+        } else {
+            binding.fragmentViewStepButtonNext.setVisibility(View.VISIBLE);
+        }
+
+        if (step.getId() == 0) {
+            binding.fragmentViewStepButtonPrevious.setVisibility(View.GONE);
+        } else {
+            binding.fragmentViewStepButtonPrevious.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initializePlayer(Uri mediaUri) {
-        if (mExoPlayer == null) {
+        if (exoPlayer == null) {
             // Create an instance of the ExoPlayer.
             BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
             TrackSelection.Factory videoTrackSelectionFactory =
                     new AdaptiveTrackSelection.Factory(bandwidthMeter);
             TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-            mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
-            mBinding.playerView.setPlayer(mExoPlayer);
-
-            // Prepare the MediaSource.
-            DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(),
-                    Util.getUserAgent(getContext(), "bakingapp"));
-            MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
-                    .createMediaSource(mediaUri);
-            mExoPlayer.prepare(mediaSource);
-            mExoPlayer.setPlayWhenReady(true);
+            exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
+            binding.playerView.setPlayer(exoPlayer);
         }
+
+        // Prepare the MediaSource.
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(),
+                Util.getUserAgent(getContext(), "bakingapp"));
+        MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
+                .createMediaSource(mediaUri);
+        exoPlayer.prepare(mediaSource);
+        exoPlayer.setPlayWhenReady(true);
     }
 
     private void releasePlayer() {
-        if (mExoPlayer != null) {
-            mExoPlayer.stop();
-            mExoPlayer.release();
-            mExoPlayer = null;
+        if (exoPlayer != null) {
+            exoPlayer.stop();
+            exoPlayer.release();
+            exoPlayer = null;
         }
     }
 }
