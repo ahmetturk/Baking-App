@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -56,6 +57,12 @@ public class ViewStepFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public void onAttach(Context context) {
         AndroidSupportInjection.inject(this);
         super.onAttach(context);
@@ -66,7 +73,6 @@ public class ViewStepFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.
                 inflate(inflater, R.layout.fragment_view_step, container, false);
-
         binding.setCallback(this);
 
         return binding.getRoot();
@@ -94,6 +100,15 @@ public class ViewStepFragment extends Fragment {
     public void onPause() {
         super.onPause();
         releasePlayer();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            getActivity().onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void onClickNext() {
