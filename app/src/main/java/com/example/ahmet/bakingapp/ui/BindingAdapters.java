@@ -12,4 +12,9 @@ public class BindingAdapters {
         DecimalFormat formatter = new DecimalFormat("0.#");
         view.setText(formatter.format(value));
     }
+
+    @BindingAdapter("visible_gone")
+    public static void showHide(View view, boolean show) {
+        view.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
 }

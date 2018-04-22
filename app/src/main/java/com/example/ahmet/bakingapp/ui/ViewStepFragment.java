@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 
 import com.example.ahmet.bakingapp.R;
 import com.example.ahmet.bakingapp.databinding.FragmentViewStepBinding;
-import com.example.ahmet.bakingapp.model.Recipe;
 import com.example.ahmet.bakingapp.model.Step;
 import com.example.ahmet.bakingapp.viewmodel.DetailViewModel;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -33,8 +32,6 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
@@ -49,7 +46,6 @@ public class ViewStepFragment extends Fragment {
     private FragmentViewStepBinding binding;
     private DetailViewModel viewModel;
     private SimpleExoPlayer exoPlayer;
-    private int totalStepCount;
 
     public static ViewStepFragment forStep(int stepId) {
         ViewStepFragment fragment = new ViewStepFragment();
@@ -84,7 +80,7 @@ public class ViewStepFragment extends Fragment {
         viewModel = ViewModelProviders.of(getActivity(), viewModelFactory).get(DetailViewModel.class);
         viewModel.setStepId(stepId);
 
-        totalStepCount = viewModel.getTotalStepCount();
+        binding.setTotalStepCount(viewModel.getTotalStepCount());
 
         viewModel.getStep().observe(this, new Observer<Step>() {
             @Override
@@ -118,18 +114,6 @@ public class ViewStepFragment extends Fragment {
 
         if (!videoUrl.isEmpty()) {
             initializePlayer(Uri.parse(videoUrl));
-        }
-
-        if (step.getId() == totalStepCount - 1) {
-            binding.fragmentViewStepButtonNext.setVisibility(View.GONE);
-        } else {
-            binding.fragmentViewStepButtonNext.setVisibility(View.VISIBLE);
-        }
-
-        if (step.getId() == 0) {
-            binding.fragmentViewStepButtonPrevious.setVisibility(View.GONE);
-        } else {
-            binding.fragmentViewStepButtonPrevious.setVisibility(View.VISIBLE);
         }
     }
 

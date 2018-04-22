@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="totalStepCount"
+            type="Integer" />
+
+        <variable
             name="step"
             type="com.example.ahmet.bakingapp.model.Step" />
 
@@ -69,7 +73,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/fragment_view_step_button_previous" />
+            app:layout_constraintStart_toEndOf="@+id/fragment_view_step_button_previous"
+            app:visible_gone="@{step.getId() + 1 != totalStepCount}" />
 
         <Button
             android:id="@+id/fragment_view_step_button_previous"
@@ -82,7 +87,8 @@
             app:layout_constraintEnd_toStartOf="@+id/fragment_view_step_button_next"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:visible_gone="@{step.getId() != 0}" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>
