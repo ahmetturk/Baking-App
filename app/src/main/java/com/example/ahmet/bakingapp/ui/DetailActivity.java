@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.ahmet.bakingapp.R;
-import com.example.ahmet.bakingapp.model.Step;
 
 import javax.inject.Inject;
 
@@ -15,7 +14,7 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
 public class DetailActivity extends AppCompatActivity
-        implements HasSupportFragmentInjector, ClickCallback<Step> {
+        implements HasSupportFragmentInjector {
     public static final String INTENT_RECIPE_ID = "recipe_id";
 
     @Inject
@@ -46,14 +45,11 @@ public class DetailActivity extends AppCompatActivity
         return dispatchingAndroidInjector;
     }
 
-    @Override
-    public void onClick(Step step) {
-        ViewStepFragment stepFragment = ViewStepFragment.forStep(step.getId());
-
+    public void onClickWatch() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .addToBackStack("recipe")
-                .replace(R.id.fragment_container, stepFragment)
+                .replace(R.id.fragment_container, new ViewStepFragment())
                 .commit();
     }
 }

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="watchCallback"
+            type="com.example.ahmet.bakingapp.ui.DetailActivity" />
+
+        <variable
+            name="nextCallback"
+            type="com.example.ahmet.bakingapp.ui.SelectStepFragment" />
+
+        <variable
+            name="step"
+            type="com.example.ahmet.bakingapp.model.Step" />
+
+        <variable
+            name="totalStepCount"
+            type="Integer" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textview_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{step.getDescription()}"
+            android:textColor="@color/step_item_text_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text='1. Preheat the oven to 350\u00b0F. Butter a 9\" deep dish pie pan.' />
+
+        <Button
+            android:id="@+id/button_watch"
+            style="@style/Button"
+            android:layout_marginTop="@dimen/margin_small"
+            android:onClick="@{() -> watchCallback.onClickWatch()}"
+            android:text="@string/button_watch"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textview_description" />
+
+        <Button
+            android:id="@+id/button_next"
+            style="@style/Button"
+            android:layout_marginStart="@dimen/margin_small"
+            android:onClick="@{() -> nextCallback.onClickNext()}"
+            android:text="@string/button_next"
+            app:layout_constraintBaseline_toBaselineOf="@+id/button_watch"
+            app:layout_constraintStart_toEndOf="@+id/button_watch"
+            app:visible_gone="@{step.getId() + 1 != totalStepCount}" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

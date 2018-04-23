@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import com.example.ahmet.bakingapp.R;
 import com.example.ahmet.bakingapp.databinding.FragmentSelectStepBinding;
 import com.example.ahmet.bakingapp.model.Recipe;
-import com.example.ahmet.bakingapp.model.Step;
 import com.example.ahmet.bakingapp.viewmodel.DetailViewModel;
 
 import java.util.List;
@@ -32,9 +31,8 @@ public class SelectStepFragment extends Fragment {
     ViewModelProvider.Factory viewModelFactory;
 
     private FragmentSelectStepBinding mBinding;
-
+    private DetailViewModel viewModel;
     private IngredientAdapter ingredientAdapter;
-    private StepAdapter stepAdapter;
 
     public static SelectStepFragment forRecipe(int recipeId) {
         SelectStepFragment fragment = new SelectStepFragment();
@@ -57,10 +55,6 @@ public class SelectStepFragment extends Fragment {
                 inflate(inflater, R.layout.fragment_select_step, container, false);
 
         mBinding.ingredientsList.setHasFixedSize(true);
-        mBinding.ingredientsList.setNestedScrollingEnabled(false);
-
-        mBinding.stepsList.setHasFixedSize(true);
-        mBinding.stepsList.setNestedScrollingEnabled(false);
 
         return mBinding.getRoot();
     }
@@ -73,12 +67,7 @@ public class SelectStepFragment extends Fragment {
         ingredientAdapter = new IngredientAdapter();
         mBinding.ingredientsList.setAdapter(ingredientAdapter);
 
-        stepAdapter = new StepAdapter((ClickCallback<Step>) getActivity());
-        mBinding.stepsList.setAdapter(stepAdapter);
-
-        DetailViewModel viewModel =
-                ViewModelProviders.of(getActivity(), viewModelFactory).get(DetailViewModel.class);
-
+        viewModel = ViewModelProviders.of(getActivity(), viewModelFactory).get(DetailViewModel.class);
         viewModel.setRecipeId(recipeId);
 
         viewModel.getRecipes().observe(this, new Observer<List<Recipe>>() {
@@ -91,10 +80,29 @@ public class SelectStepFragment extends Fragment {
         });
     }
 
+    public void onClickNext() {
+        int current = mBinding.verticalStepperView.getCurrentStep();
+        mBinding.verticalStepperView.setCurrentStep(current + 1);
+
+        viewModel.setStepId(current + 1);
+    }
+
     private void populateViews(Recipe recipe) {
         getActivity().setTitle(recipe.getName());
 
         ingredientAdapter.setList(recipe.getIngredients());
-        stepAdapter.setList(recipe.getSteps());
+
+        StepAdapter stepAdapter = new StepAdapter(
+                recipe.getSteps(),
+                (DetailActivity) getActivity(),
+                this);
+        mBinding.verticalStepperView.setStepperAdapter(stepAdapter);
+
+        viewModel.getStepId().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable Integer stepId) {
+                mBinding.verticalStepperView.setCurrentStep(stepId);
+            }
+        });
     }
 }

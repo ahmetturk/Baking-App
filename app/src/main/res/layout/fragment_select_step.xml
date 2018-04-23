@@ -13,23 +13,32 @@
 
             <TextView
                 style="@style/Title"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_normal"
                 android:text="@string/ingredients" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/ingredients_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="@dimen/margin_normal"
+                android:background="@color/colorPrimary" />
 
             <TextView
                 style="@style/Title"
                 android:text="@string/steps" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/steps_list"
+            <moe.feng.common.stepperview.VerticalStepperView
+                android:id="@+id/vertical_stepper_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </layout>

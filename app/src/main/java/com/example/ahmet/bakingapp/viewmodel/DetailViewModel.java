@@ -18,7 +18,7 @@ public class DetailViewModel extends ViewModel {
     private MutableLiveData<Step> step;
 
     private int recipeId;
-    private int stepId;
+    private MutableLiveData<Integer> stepId;
 
     @Inject
     DetailViewModel(Repository repository) {
@@ -26,6 +26,9 @@ public class DetailViewModel extends ViewModel {
     }
 
     public LiveData<Step> getStep() {
+        if (step == null) {
+            setStepValue();
+        }
         return step;
     }
 
@@ -37,26 +40,39 @@ public class DetailViewModel extends ViewModel {
         return recipes;
     }
 
-    public void setRecipeId(int recipeId){
-        this.recipeId = recipeId;
+    public LiveData<Integer> getStepId() {
+        if (stepId == null) {
+            stepId = new MutableLiveData<>();
+            stepId.setValue(0);
+        }
+
+        return stepId;
     }
 
-    public void setStepId(int stepId){
-        this.stepId = stepId;
+    public void setStepId(int id) {
+        if (stepId == null) {
+            stepId = new MutableLiveData<>();
+        }
+
+        this.stepId.setValue(id);
         setStepValue();
     }
 
-    public int getTotalStepCount(){
+    public void setRecipeId(int recipeId) {
+        this.recipeId = recipeId;
+    }
+
+    public int getTotalStepCount() {
         return recipes.getValue().get(recipeId).getSteps().size();
     }
 
     public void nextStepId() {
-        stepId++;
+        stepId.setValue(getStepId().getValue() + 1);
         setStepValue();
     }
 
     public void previousStepId() {
-        stepId--;
+        stepId.setValue(getStepId().getValue() - 1);
         setStepValue();
     }
 
@@ -64,6 +80,6 @@ public class DetailViewModel extends ViewModel {
         if (step == null) {
             step = new MutableLiveData<>();
         }
-        step.setValue(getRecipes().getValue().get(recipeId).getSteps().get(stepId));
+        step.setValue(getRecipes().getValue().get(recipeId).getSteps().get(getStepId().getValue()));
     }
 }

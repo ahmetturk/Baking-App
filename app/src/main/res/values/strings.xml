@@ -4,8 +4,9 @@
     <string name="steps">Steps</string>
     <string name="recipe_image_cd">Recipe image</string>
 
-    <string name="fragment_view_step_button_previous">Previous</string>
-    <string name="fragment_view_step_button_next">Next</string>
+    <string name="button_previous">Previous</string>
+    <string name="button_next">Next</string>
+    <string name="button_watch">Watch</string>
 
     <plurals name="serving_count">
         <item quantity="zero">%1$d servings</item>

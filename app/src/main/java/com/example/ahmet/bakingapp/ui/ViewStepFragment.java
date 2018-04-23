@@ -48,14 +48,6 @@ public class ViewStepFragment extends Fragment {
     private DetailViewModel viewModel;
     private SimpleExoPlayer exoPlayer;
 
-    public static ViewStepFragment forStep(int stepId) {
-        ViewStepFragment fragment = new ViewStepFragment();
-        Bundle args = new Bundle();
-        args.putInt(KEY_STEP_ID, stepId);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,10 +73,7 @@ public class ViewStepFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        final int stepId = getArguments().getInt(KEY_STEP_ID);
-
         viewModel = ViewModelProviders.of(getActivity(), viewModelFactory).get(DetailViewModel.class);
-        viewModel.setStepId(stepId);
 
         binding.setTotalStepCount(viewModel.getTotalStepCount());
 
@@ -145,7 +134,7 @@ public class ViewStepFragment extends Fragment {
 
         // Prepare the MediaSource.
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(),
-                Util.getUserAgent(getContext(), "bakingapp"));
+                Util.getUserAgent(getContext(), getString(R.string.app_name)));
         MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
                 .createMediaSource(mediaUri);
         exoPlayer.prepare(mediaSource);

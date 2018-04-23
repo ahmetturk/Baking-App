@@ -1,65 +1,71 @@
 package com.example.ahmet.bakingapp.ui;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
-import android.view.ViewGroup;
+import android.view.View;
 
 import com.example.ahmet.bakingapp.R;
-import com.example.ahmet.bakingapp.databinding.ItemStepBinding;
+import com.example.ahmet.bakingapp.databinding.ItemVerticalStepperBinding;
 import com.example.ahmet.bakingapp.model.Step;
 
 import java.util.List;
 
-public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepAdapterViewHolder> {
+import moe.feng.common.stepperview.IStepperAdapter;
+import moe.feng.common.stepperview.VerticalStepperItemView;
 
-    private List<Step> mList;
-    private ClickCallback<Step> callback;
+public class StepAdapter implements IStepperAdapter {
 
-    public StepAdapter(ClickCallback<Step> callback) {
-        this.callback = callback;
+    private List<Step> steps;
+    private DetailActivity activity;
+    private SelectStepFragment fragment;
+
+    public StepAdapter(List<Step> steps, DetailActivity activity, SelectStepFragment fragment) {
+        this.steps = steps;
+        this.activity = activity;
+        this.fragment = fragment;
     }
 
     @NonNull
     @Override
-    public StepAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        ItemStepBinding binding =
-                DataBindingUtil.inflate(layoutInflater, R.layout.item_step, parent, false);
-        return new StepAdapterViewHolder(binding);
+    public CharSequence getTitle(int i) {
+        return steps.get(i).getShortDescription();
+    }
+
+    @Nullable
+    @Override
+    public CharSequence getSummary(int i) {
+        return steps.get(i).getDescription();
     }
 
     @Override
-    public void onBindViewHolder(@NonNull StepAdapterViewHolder holder, int position) {
-        Step step = mList.get(position);
-        holder.bind(step);
+    public int size() {
+        return steps.size();
     }
 
     @Override
-    public int getItemCount() {
-        if (mList == null) {
-            return 0;
-        }
-        return mList.size();
+    public View onCreateCustomView(int i, Context context, VerticalStepperItemView parent) {
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        ItemVerticalStepperBinding binding =
+                DataBindingUtil.inflate(layoutInflater, R.layout.item_vertical_stepper, parent, false);
+
+        binding.setWatchCallback(activity);
+        binding.setNextCallback(fragment);
+        binding.setStep(steps.get(i));
+        binding.setTotalStepCount(steps.size());
+
+        return binding.getRoot();
     }
 
-    public void setList(List<Step> list) {
-        mList = list;
-        notifyDataSetChanged();
+    @Override
+    public void onShow(int i) {
+
     }
 
-    class StepAdapterViewHolder extends RecyclerView.ViewHolder {
-        final ItemStepBinding binding;
+    @Override
+    public void onHide(int i) {
 
-        StepAdapterViewHolder(ItemStepBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-        }
-
-        void bind(Step step) {
-            binding.setStep(step);
-            binding.setCallback(callback);
-        }
     }
 }
