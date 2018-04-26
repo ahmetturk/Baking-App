@@ -12,7 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.example.ahmet.bakingapp.R;
 import com.example.ahmet.bakingapp.databinding.ActivityMainBinding;
 import com.example.ahmet.bakingapp.model.Recipe;
-import com.example.ahmet.bakingapp.utils.VerticalItemDecoration;
+import com.example.ahmet.bakingapp.utils.MainItemDecoration;
 import com.example.ahmet.bakingapp.viewmodel.MainViewModel;
 
 import java.util.List;
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements ClickCallback<Rec
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         binding.recipesList.setHasFixedSize(true);
-        binding.recipesList.addItemDecoration(new VerticalItemDecoration(this));
+        binding.recipesList.addItemDecoration(new MainItemDecoration(this));
 
         mAdapter = new MainAdapter(this);
         binding.recipesList.setAdapter(mAdapter);
