@@ -5,11 +5,13 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -73,6 +75,17 @@ public class ViewStepFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        if (getContext().getResources().getConfiguration().orientation
+                == Configuration.ORIENTATION_LANDSCAPE
+                && getContext().getResources().getConfiguration().smallestScreenWidthDp < 600) {
+            ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+            getActivity().getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_FULLSCREEN |
+                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
+
         viewModel = ViewModelProviders.of(getActivity(), viewModelFactory).get(DetailViewModel.class);
 
         binding.setTotalStepCount(viewModel.getTotalStepCount());
@@ -84,6 +97,8 @@ public class ViewStepFragment extends Fragment {
             }
         });
     }
+
+
 
     @Override
     public void onPause() {
