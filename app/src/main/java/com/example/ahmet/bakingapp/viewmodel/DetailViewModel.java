@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModel;
 import com.example.ahmet.bakingapp.model.Recipe;
 import com.example.ahmet.bakingapp.model.Step;
 import com.example.ahmet.bakingapp.repository.Repository;
+import com.example.ahmet.bakingapp.repository.Resource;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import javax.inject.Inject;
 
 public class DetailViewModel extends ViewModel {
     private final Repository repository;
-    private LiveData<List<Recipe>> recipes;
+    private LiveData<Resource<List<Recipe>>> recipes;
     private MutableLiveData<Step> step;
 
     private int recipeId;
@@ -32,9 +33,9 @@ public class DetailViewModel extends ViewModel {
         return step;
     }
 
-    public LiveData<List<Recipe>> getRecipes() {
+    public LiveData<Resource<List<Recipe>>> getRecipes() {
         if (recipes == null) {
-            recipes = repository.getRecipes();
+            recipes = repository.loadRecipes();
         }
 
         return recipes;
@@ -63,7 +64,7 @@ public class DetailViewModel extends ViewModel {
     }
 
     public int getTotalStepCount() {
-        return recipes.getValue().get(recipeId).getSteps().size();
+        return recipes.getValue().data.get(recipeId).getSteps().size();
     }
 
     public void nextStepId() {
@@ -80,6 +81,6 @@ public class DetailViewModel extends ViewModel {
         if (step == null) {
             step = new MutableLiveData<>();
         }
-        step.setValue(getRecipes().getValue().get(recipeId).getSteps().get(getStepId().getValue()));
+        step.setValue(getRecipes().getValue().data.get(recipeId).getSteps().get(getStepId().getValue()));
     }
 }

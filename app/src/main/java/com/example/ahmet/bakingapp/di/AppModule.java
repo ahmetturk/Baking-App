@@ -1,6 +1,11 @@
 package com.example.ahmet.bakingapp.di;
 
+import android.app.Application;
+import android.arch.persistence.room.Room;
+
+import com.example.ahmet.bakingapp.api.LiveDataCallAdapterFactory;
 import com.example.ahmet.bakingapp.api.WebService;
+import com.example.ahmet.bakingapp.db.AppDatabase;
 
 import javax.inject.Singleton;
 
@@ -17,7 +22,14 @@ public class AppModule {
         return new Retrofit.Builder()
                 .baseUrl("https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/")
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(new LiveDataCallAdapterFactory())
                 .build()
                 .create(WebService.class);
+    }
+
+    @Singleton
+    @Provides
+    AppDatabase provideDb(Application app) {
+        return Room.databaseBuilder(app, AppDatabase.class, "bakingapp.db").build();
     }
 }

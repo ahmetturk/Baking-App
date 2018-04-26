@@ -79,11 +79,11 @@ public class ViewStepFragment extends Fragment {
         if (getContext().getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_LANDSCAPE
                 && getContext().getResources().getConfiguration().smallestScreenWidthDp < 600) {
-            ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+            ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
             getActivity().getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_FULLSCREEN |
-                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
 
         viewModel = ViewModelProviders.of(getActivity(), viewModelFactory).get(DetailViewModel.class);
@@ -97,7 +97,6 @@ public class ViewStepFragment extends Fragment {
             }
         });
     }
-
 
 
     @Override

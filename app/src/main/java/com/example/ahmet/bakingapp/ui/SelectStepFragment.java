@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.example.ahmet.bakingapp.R;
 import com.example.ahmet.bakingapp.databinding.FragmentSelectStepBinding;
 import com.example.ahmet.bakingapp.model.Recipe;
+import com.example.ahmet.bakingapp.repository.Resource;
 import com.example.ahmet.bakingapp.viewmodel.DetailViewModel;
 
 import java.util.List;
@@ -70,11 +71,11 @@ public class SelectStepFragment extends Fragment {
         viewModel = ViewModelProviders.of(getActivity(), viewModelFactory).get(DetailViewModel.class);
         viewModel.setRecipeId(recipeId);
 
-        viewModel.getRecipes().observe(this, new Observer<List<Recipe>>() {
+        viewModel.getRecipes().observe(this, new Observer<Resource<List<Recipe>>>() {
             @Override
-            public void onChanged(@Nullable List<Recipe> recipes) {
-                if (recipes != null) {
-                    populateViews(recipes.get(recipeId));
+            public void onChanged(@Nullable Resource<List<Recipe>> listResource) {
+                if (listResource.data != null) {
+                    populateViews(listResource.data.get(recipeId));
                 }
             }
         });

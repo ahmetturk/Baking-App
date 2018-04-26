@@ -35,14 +35,14 @@ public class DetailActivity extends AppCompatActivity
         SelectStepFragment selectStepFragment = SelectStepFragment.forRecipe(recipeId);
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.select_fragment_container, selectStepFragment)
+                .replace(R.id.select_fragment_container, selectStepFragment)
                 .commit();
 
         if (isTabletLandscape) {
             ViewStepFragment viewStepFragment = new ViewStepFragment();
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.view_fragment_container, viewStepFragment)
+                    .replace(R.id.view_fragment_container, viewStepFragment)
                     .commit();
         }
 

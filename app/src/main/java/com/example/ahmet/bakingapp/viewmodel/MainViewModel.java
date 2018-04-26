@@ -5,13 +5,14 @@ import android.arch.lifecycle.ViewModel;
 
 import com.example.ahmet.bakingapp.model.Recipe;
 import com.example.ahmet.bakingapp.repository.Repository;
+import com.example.ahmet.bakingapp.repository.Resource;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
 public class MainViewModel extends ViewModel {
-    private LiveData<List<Recipe>> recipes;
+    private LiveData<Resource<List<Recipe>>> recipes;
     private final Repository repository;
 
     @Inject
@@ -19,9 +20,9 @@ public class MainViewModel extends ViewModel {
         this.repository = repository;
     }
 
-    public LiveData<List<Recipe>> getRecipes() {
+    public LiveData<Resource<List<Recipe>>> getRecipes() {
         if (recipes == null) {
-            recipes = repository.getRecipes();
+            recipes = repository.loadRecipes();
         }
 
         return recipes;

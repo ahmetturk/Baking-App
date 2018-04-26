@@ -1,9 +1,16 @@
 package com.example.ahmet.bakingapp.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@Entity
 public class Ingredient {
+
+    @PrimaryKey(autoGenerate = true)
+    private int roomId;
 
     @SerializedName("quantity")
     @Expose
@@ -14,6 +21,8 @@ public class Ingredient {
     @SerializedName("ingredient")
     @Expose
     private String ingredient;
+
+    private int recipeId;
 
     public Double getQuantity() {
         return quantity;
@@ -39,4 +48,19 @@ public class Ingredient {
         this.ingredient = ingredient;
     }
 
+    public int getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
+    }
+
+    public int getRecipeId() {
+        return recipeId;
+    }
+
+    public void setRecipeId(int recipeId) {
+        this.recipeId = recipeId;
+    }
 }

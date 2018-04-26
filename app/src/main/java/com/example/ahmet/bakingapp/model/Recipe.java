@@ -1,21 +1,29 @@
 package com.example.ahmet.bakingapp.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+@Entity
 public class Recipe {
 
+    @PrimaryKey
     @SerializedName("id")
     @Expose
     private Integer id;
     @SerializedName("name")
     @Expose
     private String name;
+    @Ignore
     @SerializedName("ingredients")
     @Expose
     private List<Ingredient> ingredients = null;
+    @Ignore
     @SerializedName("steps")
     @Expose
     private List<Step> steps = null;
@@ -73,5 +81,4 @@ public class Recipe {
     public void setImage(String image) {
         this.image = image;
     }
-
 }

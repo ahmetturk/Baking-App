@@ -1,49 +1,77 @@
 package com.example.ahmet.bakingapp.repository;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.MediatorLiveData;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
+import com.example.ahmet.bakingapp.AppExecutors;
+import com.example.ahmet.bakingapp.api.ApiResponse;
 import com.example.ahmet.bakingapp.api.WebService;
+import com.example.ahmet.bakingapp.db.AppDatabase;
 import com.example.ahmet.bakingapp.model.Recipe;
+import com.example.ahmet.bakingapp.model.RecipeView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 @Singleton
 public class Repository {
 
+    private final AppExecutors appExecutors;
     private final WebService webService;
-    private MutableLiveData<List<Recipe>> data;
+    private final AppDatabase appDatabase;
+
+    private MediatorLiveData<List<Recipe>> recipesLiveData;
 
     @Inject
-    Repository(WebService webService) {
+    Repository(AppExecutors appExecutors, WebService webService, AppDatabase appDatabase) {
+        this.appExecutors = appExecutors;
         this.webService = webService;
+        this.appDatabase = appDatabase;
     }
 
-    public LiveData<List<Recipe>> getRecipes() {
-        if (data == null) {
-            data = new MutableLiveData<>();
+    public LiveData<Resource<List<Recipe>>> loadRecipes() {
+        return new NetworkBoundResource<List<Recipe>, List<Recipe>>(appExecutors) {
 
-            webService.getRecipes().enqueue(new Callback<List<Recipe>>() {
-                @Override
-                public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                    data.setValue(response.body());
-                }
+            @Override
+            protected void saveCallResult(@NonNull List<Recipe> item) {
+                appDatabase.recipeDao().insertRecipes(item);
+            }
 
-                @Override
-                public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                    // TODO Failure
-                }
-            });
-        }
+            @Override
+            protected boolean shouldFetch(@Nullable List<Recipe> data) {
+                return data == null || data.size() == 0;
+            }
 
-        return data;
+            @NonNull
+            @Override
+            protected LiveData<List<Recipe>> loadFromDb() {
+                LiveData<List<RecipeView>> recipeViewsLiveData = appDatabase.recipeDao().getRecipes();
+                recipesLiveData = new MediatorLiveData<>();
+                recipesLiveData.addSource(recipeViewsLiveData, recipeViews -> {
+                    List<Recipe> recipes = new ArrayList<>();
+
+                    for (RecipeView recipeView : recipeViews) {
+                        recipeView.recipe.setIngredients(recipeView.ingredients);
+                        recipeView.recipe.setSteps(recipeView.steps);
+                        recipes.add(recipeView.recipe);
+                    }
+
+                    recipesLiveData.setValue(recipes);
+                });
+                return recipesLiveData;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<List<Recipe>>> createCall() {
+                return webService.getRecipes();
+            }
+        }.asLiveData();
     }
 
 }

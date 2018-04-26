@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.example.ahmet.bakingapp.R;
 import com.example.ahmet.bakingapp.databinding.ActivityMainBinding;
 import com.example.ahmet.bakingapp.model.Recipe;
+import com.example.ahmet.bakingapp.repository.Resource;
 import com.example.ahmet.bakingapp.utils.MainItemDecoration;
 import com.example.ahmet.bakingapp.viewmodel.MainViewModel;
 
@@ -43,10 +44,10 @@ public class MainActivity extends AppCompatActivity implements ClickCallback<Rec
         binding.recipesList.setAdapter(mAdapter);
 
         MainViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
-        viewModel.getRecipes().observe(this, new Observer<List<Recipe>>() {
+        viewModel.getRecipes().observe(this, new Observer<Resource<List<Recipe>>>() {
             @Override
-            public void onChanged(@Nullable List<Recipe> recipes) {
-                mAdapter.setList(recipes);
+            public void onChanged(@Nullable Resource<List<Recipe>> listResource) {
+                mAdapter.setList(listResource.data);
             }
         });
     }
