@@ -17,6 +17,8 @@ public class DetailActivity extends AppCompatActivity
         implements HasSupportFragmentInjector {
     public static final String INTENT_RECIPE_ID = "recipe_id";
 
+    private boolean isTabletLandscape;
+
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 
@@ -26,14 +28,21 @@ public class DetailActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        if (savedInstanceState == null) {
-            int recipeId = getIntent().getIntExtra(INTENT_RECIPE_ID, 0);
+        isTabletLandscape = findViewById(R.id.view_fragment_container) != null;
 
-            SelectStepFragment fragment = SelectStepFragment.forRecipe(recipeId);
+        int recipeId = getIntent().getIntExtra(INTENT_RECIPE_ID, 0);
 
+        SelectStepFragment selectStepFragment = SelectStepFragment.forRecipe(recipeId);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.select_fragment_container, selectStepFragment)
+                .commit();
+
+        if (isTabletLandscape) {
+            ViewStepFragment viewStepFragment = new ViewStepFragment();
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fragment_container, fragment)
+                    .add(R.id.view_fragment_container, viewStepFragment)
                     .commit();
         }
 
@@ -46,10 +55,12 @@ public class DetailActivity extends AppCompatActivity
     }
 
     public void onClickWatch() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .addToBackStack("recipe")
-                .replace(R.id.fragment_container, new ViewStepFragment())
-                .commit();
+        if (!isTabletLandscape) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .addToBackStack("recipe")
+                    .replace(R.id.select_fragment_container, new ViewStepFragment())
+                    .commit();
+        }
     }
 }
