@@ -9,8 +9,8 @@ import android.support.annotation.Nullable;
 
 public class UpdateWidgetService extends IntentService {
 
-    public static final String ACTION_UPDATE_WIDGETS = "com.example.ahmet.bakingapp.widget.action.update_widgets";
-    public static final String EXTRA_INGREDIENTS = "com.example.ahmet.bakingapp.widget.extra.RECIPE_ID";
+    private static final String ACTION_UPDATE_WIDGETS = "com.example.ahmet.bakingapp.widget.action.update_widgets";
+    private static final String EXTRA_INGREDIENTS = "com.example.ahmet.bakingapp.widget.extra.RECIPE_ID";
 
     public UpdateWidgetService() {
         super("UpdateWidgetService");

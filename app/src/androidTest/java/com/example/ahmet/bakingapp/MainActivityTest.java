@@ -33,7 +33,7 @@ public class MainActivityTest {
     private IdlingResource mIdlingResource;
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule =
+    final public ActivityTestRule<MainActivity> mActivityTestRule =
             new ActivityTestRule<>(MainActivity.class);
 
     @Before
@@ -69,10 +69,13 @@ public class MainActivityTest {
     private static Matcher<Object> withToolbarTitle(
             final Matcher<CharSequence> textMatcher) {
         return new BoundedMatcher<Object, Toolbar>(Toolbar.class) {
-            @Override public boolean matchesSafely(Toolbar toolbar) {
+            @Override
+            public boolean matchesSafely(Toolbar toolbar) {
                 return textMatcher.matches(toolbar.getTitle());
             }
-            @Override public void describeTo(Description description) {
+
+            @Override
+            public void describeTo(Description description) {
                 description.appendText("with toolbar title: ");
                 textMatcher.describeTo(description);
             }

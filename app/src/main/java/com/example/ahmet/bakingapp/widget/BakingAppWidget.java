@@ -15,7 +15,7 @@ import com.example.ahmet.bakingapp.ui.MainActivity;
  */
 public class BakingAppWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int [] appWidgetIds, String ingredients) {
+                                int[] appWidgetIds, String ingredients) {
         for (int appWidgetId : appWidgetIds) {
             // Create an Intent to launch MainActivity when clicked
             Intent intent = new Intent(context, MainActivity.class);

@@ -9,10 +9,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Toast;
 
 import com.example.ahmet.bakingapp.R;
 import com.example.ahmet.bakingapp.databinding.ActivityMainBinding;
 import com.example.ahmet.bakingapp.model.Recipe;
+import com.example.ahmet.bakingapp.repository.Status;
 import com.example.ahmet.bakingapp.test.SimpleIdlingResource;
 import com.example.ahmet.bakingapp.utils.MainItemDecoration;
 import com.example.ahmet.bakingapp.viewmodel.MainViewModel;
@@ -45,8 +48,15 @@ public class MainActivity extends AppCompatActivity implements ClickCallback<Rec
 
         MainViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
         viewModel.getRecipes().observe(this, listResource -> {
-            mAdapter.setList(listResource.data);
-            mIdlingResource.isIdleNow();
+            if (listResource.status == Status.LOADING) {
+                binding.activityMainProgressBar.setVisibility(View.VISIBLE);
+            } else if (listResource.status == Status.SUCCESS) {
+                binding.activityMainProgressBar.setVisibility(View.GONE);
+                mAdapter.setList(listResource.data);
+                mIdlingResource.isIdleNow();
+            } else if (listResource.status == Status.ERROR) {
+                Toast.makeText(this, R.string.no_internet, Toast.LENGTH_LONG).show();
+            }
         });
 
         getIdlingResource();

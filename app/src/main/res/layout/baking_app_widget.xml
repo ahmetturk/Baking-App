@@ -9,6 +9,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_small"
         android:textColor="@color/ingredient_item_text_color"
-        android:textSize="14sp"/>
+        android:textSize="@dimen/text_size_default" />
 
 </RelativeLayout>

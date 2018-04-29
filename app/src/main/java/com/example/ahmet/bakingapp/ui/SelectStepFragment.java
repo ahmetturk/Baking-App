@@ -112,8 +112,8 @@ public class SelectStepFragment extends Fragment {
                 this);
         mBinding.verticalStepperView.setStepperAdapter(stepAdapter);
 
-        viewModel.getStepId().observe(this, stepId -> {
-            mBinding.verticalStepperView.setCurrentStep(stepId);
-        });
+        viewModel.getStepId().observe(this, stepId ->
+            mBinding.verticalStepperView.setCurrentStep(stepId)
+        );
     }
 }

@@ -36,7 +36,7 @@
                 style="@style/Button"
                 android:layout_marginStart="@dimen/margin_normal"
                 android:text="@string/button_add_widget"
-                android:onClick="@{() -> callback.onClickAddWidget()}"/>
+                android:onClick="@{() -> callback.onClickAddWidget()}" />
 
             <View
                 android:layout_width="match_parent"

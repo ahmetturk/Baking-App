@@ -18,9 +18,9 @@ import moe.feng.common.stepperview.VerticalStepperItemView;
 
 public class StepAdapter implements IStepperAdapter {
 
-    private List<Step> steps;
-    private DetailActivity activity;
-    private SelectStepFragment fragment;
+    private final List<Step> steps;
+    private final DetailActivity activity;
+    private final SelectStepFragment fragment;
 
     public StepAdapter(List<Step> steps, DetailActivity activity, SelectStepFragment fragment) {
         this.steps = steps;
