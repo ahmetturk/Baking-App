@@ -28,5 +28,4 @@ public class BakingApp extends Application implements HasActivityInjector {
     public DispatchingAndroidInjector<Activity> activityInjector() {
         return dispatchingAndroidInjector;
     }
-
 }

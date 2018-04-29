@@ -7,6 +7,8 @@
     <string name="button_previous">Previous</string>
     <string name="button_next">Next</string>
     <string name="button_watch">Watch</string>
+    <string name="button_add_widget">Add Widget</string>
+    <string name="widget_text">Enter a recipe and click add widget button</string>
 
     <plurals name="serving_count">
         <item quantity="zero">%1$d servings</item>

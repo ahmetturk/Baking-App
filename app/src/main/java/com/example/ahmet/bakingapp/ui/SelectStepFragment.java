@@ -1,6 +1,5 @@
 package com.example.ahmet.bakingapp.ui;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -14,11 +13,12 @@ import android.view.ViewGroup;
 
 import com.example.ahmet.bakingapp.R;
 import com.example.ahmet.bakingapp.databinding.FragmentSelectStepBinding;
+import com.example.ahmet.bakingapp.model.Ingredient;
 import com.example.ahmet.bakingapp.model.Recipe;
-import com.example.ahmet.bakingapp.repository.Resource;
 import com.example.ahmet.bakingapp.viewmodel.DetailViewModel;
+import com.example.ahmet.bakingapp.widget.UpdateWidgetService;
 
-import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -34,6 +34,7 @@ public class SelectStepFragment extends Fragment {
     private FragmentSelectStepBinding mBinding;
     private DetailViewModel viewModel;
     private IngredientAdapter ingredientAdapter;
+    private Recipe recipe;
 
     public static SelectStepFragment forRecipe(int recipeId) {
         SelectStepFragment fragment = new SelectStepFragment();
@@ -54,6 +55,7 @@ public class SelectStepFragment extends Fragment {
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.
                 inflate(inflater, R.layout.fragment_select_step, container, false);
+        mBinding.setCallback(this);
 
         mBinding.ingredientsList.setHasFixedSize(true);
 
@@ -71,12 +73,10 @@ public class SelectStepFragment extends Fragment {
         viewModel = ViewModelProviders.of(getActivity(), viewModelFactory).get(DetailViewModel.class);
         viewModel.setRecipeId(recipeId);
 
-        viewModel.getRecipes().observe(this, new Observer<Resource<List<Recipe>>>() {
-            @Override
-            public void onChanged(@Nullable Resource<List<Recipe>> listResource) {
-                if (listResource.data != null) {
-                    populateViews(listResource.data.get(recipeId));
-                }
+        viewModel.getRecipes().observe(this, listResource -> {
+            if (listResource.data != null) {
+                recipe = listResource.data.get(recipeId);
+                populateViews();
             }
         });
     }
@@ -88,7 +88,20 @@ public class SelectStepFragment extends Fragment {
         viewModel.setStepId(current + 1);
     }
 
-    private void populateViews(Recipe recipe) {
+    public void onClickAddWidget() {
+        StringBuilder builder = new StringBuilder();
+
+        for (Ingredient ingredient : recipe.getIngredients()) {
+            builder.append(String.format(Locale.getDefault(), "%.1f %s %s\n",
+                    ingredient.getQuantity(), ingredient.getMeasure(), ingredient.getIngredient()));
+        }
+
+        String ingredients = builder.toString();
+
+        UpdateWidgetService.startActionUpdateWidgets(getContext(), ingredients);
+    }
+
+    private void populateViews() {
         getActivity().setTitle(recipe.getName());
 
         ingredientAdapter.setList(recipe.getIngredients());
@@ -99,11 +112,8 @@ public class SelectStepFragment extends Fragment {
                 this);
         mBinding.verticalStepperView.setStepperAdapter(stepAdapter);
 
-        viewModel.getStepId().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(@Nullable Integer stepId) {
-                mBinding.verticalStepperView.setCurrentStep(stepId);
-            }
+        viewModel.getStepId().observe(this, stepId -> {
+            mBinding.verticalStepperView.setCurrentStep(stepId);
         });
     }
 }
