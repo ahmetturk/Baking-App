@@ -1,7 +1,6 @@
 package com.example.ahmet.bakingapp.ui;
 
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -88,13 +87,9 @@ public class ViewStepFragment extends Fragment {
 
         viewModel = ViewModelProviders.of(getActivity(), viewModelFactory).get(DetailViewModel.class);
 
-        binding.setTotalStepCount(viewModel.getTotalStepCount());
-
-        viewModel.getStep().observe(this, new Observer<Step>() {
-            @Override
-            public void onChanged(@Nullable Step step) {
-                populateViews(step);
-            }
+        viewModel.getStep().observe(this, step -> {
+            populateViews(step);
+            binding.setTotalStepCount(viewModel.getTotalStepCount());
         });
     }
 

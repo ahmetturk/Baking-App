@@ -1,6 +1,7 @@
 package com.example.ahmet.bakingapp.viewmodel;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
@@ -16,7 +17,7 @@ import javax.inject.Inject;
 public class DetailViewModel extends ViewModel {
     private final Repository repository;
     private LiveData<Resource<List<Recipe>>> recipes;
-    private MutableLiveData<Step> step;
+    private MediatorLiveData<Step> step;
 
     private int recipeId;
     private MutableLiveData<Integer> stepId;
@@ -50,15 +51,6 @@ public class DetailViewModel extends ViewModel {
         return stepId;
     }
 
-    public void setStepId(int id) {
-        if (stepId == null) {
-            stepId = new MutableLiveData<>();
-        }
-
-        this.stepId.setValue(id);
-        setStepValue();
-    }
-
     public void setRecipeId(int recipeId) {
         this.recipeId = recipeId;
     }
@@ -69,18 +61,30 @@ public class DetailViewModel extends ViewModel {
 
     public void nextStepId() {
         stepId.setValue(getStepId().getValue() + 1);
-        setStepValue();
     }
 
     public void previousStepId() {
         stepId.setValue(getStepId().getValue() - 1);
-        setStepValue();
     }
 
     private void setStepValue() {
         if (step == null) {
-            step = new MutableLiveData<>();
+            step = new MediatorLiveData<>();
         }
-        step.setValue(getRecipes().getValue().data.get(recipeId).getSteps().get(getStepId().getValue()));
+        LiveData<Resource<List<Recipe>>> resourceLiveData = getRecipes();
+        LiveData<Integer> stepIdLiveData = getStepId();
+
+        step.addSource(resourceLiveData, resources -> {
+            if (resources.data != null) {
+                step.setValue(resources.data.get(recipeId).getSteps().get(getStepId().getValue()));
+            }
+        });
+
+        step.addSource(stepIdLiveData, stepId -> {
+            Resource<List<Recipe>> resources = getRecipes().getValue();
+            if (stepId != null && resources.data != null) {
+                step.setValue(resources.data.get(recipeId).getSteps().get(stepId));
+            }
+        });
     }
 }

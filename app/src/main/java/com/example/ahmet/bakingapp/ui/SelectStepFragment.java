@@ -85,7 +85,7 @@ public class SelectStepFragment extends Fragment {
         int current = mBinding.verticalStepperView.getCurrentStep();
         mBinding.verticalStepperView.setCurrentStep(current + 1);
 
-        viewModel.setStepId(current + 1);
+        viewModel.nextStepId();
     }
 
     public void onClickAddWidget() {
