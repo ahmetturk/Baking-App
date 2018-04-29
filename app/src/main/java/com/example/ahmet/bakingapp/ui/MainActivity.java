@@ -1,22 +1,21 @@
 package com.example.ahmet.bakingapp.ui;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.ahmet.bakingapp.R;
 import com.example.ahmet.bakingapp.databinding.ActivityMainBinding;
 import com.example.ahmet.bakingapp.model.Recipe;
-import com.example.ahmet.bakingapp.repository.Resource;
+import com.example.ahmet.bakingapp.test.SimpleIdlingResource;
 import com.example.ahmet.bakingapp.utils.MainItemDecoration;
 import com.example.ahmet.bakingapp.viewmodel.MainViewModel;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -30,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements ClickCallback<Rec
     ViewModelProvider.Factory viewModelFactory;
 
     private MainAdapter mAdapter;
+    private IdlingResource mIdlingResource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +44,12 @@ public class MainActivity extends AppCompatActivity implements ClickCallback<Rec
         binding.recipesList.setAdapter(mAdapter);
 
         MainViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
-        viewModel.getRecipes().observe(this, new Observer<Resource<List<Recipe>>>() {
-            @Override
-            public void onChanged(@Nullable Resource<List<Recipe>> listResource) {
-                mAdapter.setList(listResource.data);
-            }
+        viewModel.getRecipes().observe(this, listResource -> {
+            mAdapter.setList(listResource.data);
+            mIdlingResource.isIdleNow();
         });
+
+        getIdlingResource();
     }
 
     @Override
@@ -57,5 +57,14 @@ public class MainActivity extends AppCompatActivity implements ClickCallback<Rec
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra(INTENT_RECIPE_ID, recipe.getId());
         startActivity(intent);
+    }
+
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (mIdlingResource == null) {
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
     }
 }
