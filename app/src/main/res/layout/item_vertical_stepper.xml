@@ -7,15 +7,15 @@
 
         <variable
             name="watchCallback"
-            type="com.example.ahmet.bakingapp.ui.DetailActivity" />
+            type="com.ahmetroid.ahmet.bakingapp.ui.DetailActivity" />
 
         <variable
             name="nextCallback"
-            type="com.example.ahmet.bakingapp.ui.SelectStepFragment" />
+            type="com.ahmetroid.ahmet.bakingapp.ui.SelectStepFragment" />
 
         <variable
             name="step"
-            type="com.example.ahmet.bakingapp.model.Step" />
+            type="com.ahmetroid.ahmet.bakingapp.model.Step" />
 
         <variable
             name="totalStepCount"

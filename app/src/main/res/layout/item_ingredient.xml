@@ -7,7 +7,7 @@
 
         <variable
             name="ingredient"
-            type="com.example.ahmet.bakingapp.model.Ingredient" />
+            type="com.ahmetroid.ahmet.bakingapp.model.Ingredient" />
     </data>
 
     <android.support.constraint.ConstraintLayout

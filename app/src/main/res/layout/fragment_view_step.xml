@@ -11,11 +11,11 @@
 
         <variable
             name="step"
-            type="com.example.ahmet.bakingapp.model.Step" />
+            type="com.ahmetroid.ahmet.bakingapp.model.Step" />
 
         <variable
             name="callback"
-            type="com.example.ahmet.bakingapp.ui.ViewStepFragment" />
+            type="com.ahmetroid.ahmet.bakingapp.ui.ViewStepFragment" />
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -26,7 +26,26 @@
             android:id="@+id/player_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintDimensionRatio="16:9" />
+            app:layout_constraintDimensionRatio="16:9"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/image_view_player"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="16:9"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.constraint.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="image_view_player,player_view" />
 
         <TextView
             android:id="@+id/fragment_view_step_textview_short_desription"
@@ -34,13 +53,13 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_default"
             android:layout_marginStart="@dimen/margin_default"
-            android:layout_marginTop="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_small"
             android:text="@{step.getShortDescription()}"
             android:textColor="@color/fragment_view_step_short_description"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/player_view"
+            app:layout_constraintTop_toBottomOf="@+id/barrier"
             tools:text="Prep the cookie crust." />
 
         <TextView

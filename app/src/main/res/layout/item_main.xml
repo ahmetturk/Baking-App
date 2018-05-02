@@ -8,11 +8,11 @@
 
         <variable
             name="recipe"
-            type="com.example.ahmet.bakingapp.model.Recipe" />
+            type="com.ahmetroid.ahmet.bakingapp.model.Recipe" />
 
         <variable
             name="callback"
-            type="com.example.ahmet.bakingapp.ui.ClickCallback" />
+            type="com.ahmetroid.ahmet.bakingapp.ui.ClickCallback" />
     </data>
 
     <android.support.v7.widget.CardView
