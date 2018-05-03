@@ -3,12 +3,14 @@ package com.ahmetroid.ahmet.bakingapp.ui;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.ahmetroid.ahmet.bakingapp.R;
 import com.ahmetroid.ahmet.bakingapp.databinding.ItemMainBinding;
 import com.ahmetroid.ahmet.bakingapp.model.Recipe;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -61,6 +63,14 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainAdapterVie
 
         void bind(Recipe recipe) {
             binding.setRecipe(recipe);
+
+            if (!TextUtils.isEmpty(recipe.getImage())) {
+                Picasso.get().load(recipe.getImage())
+                        .placeholder(R.drawable.placeholder)
+                        .into(binding.recipeImage);
+            } else {
+                binding.recipeImage.setImageResource(R.drawable.placeholder);
+            }
         }
     }
 }

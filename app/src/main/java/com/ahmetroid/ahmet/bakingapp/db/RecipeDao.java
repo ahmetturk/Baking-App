@@ -45,5 +45,9 @@ public abstract class RecipeDao {
     @Transaction
     @Query("SELECT * FROM Recipe")
     public abstract LiveData<List<RecipeView>> getRecipes();
+
+    @Transaction
+    @Query("SELECT * FROM Recipe WHERE id = :id")
+    public abstract RecipeView getRecipe(int id);
 }
 

@@ -1,7 +1,9 @@
 package com.ahmetroid.ahmet.bakingapp.ui;
 
+import android.appwidget.AppWidgetManager;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.ComponentName;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -13,12 +15,10 @@ import android.view.ViewGroup;
 
 import com.ahmetroid.ahmet.bakingapp.R;
 import com.ahmetroid.ahmet.bakingapp.databinding.FragmentSelectStepBinding;
-import com.ahmetroid.ahmet.bakingapp.model.Ingredient;
 import com.ahmetroid.ahmet.bakingapp.model.Recipe;
+import com.ahmetroid.ahmet.bakingapp.utils.PrefsUtil;
 import com.ahmetroid.ahmet.bakingapp.viewmodel.DetailViewModel;
-import com.ahmetroid.ahmet.bakingapp.widget.UpdateWidgetService;
-
-import java.util.Locale;
+import com.ahmetroid.ahmet.bakingapp.widget.BakingAppWidget;
 
 import javax.inject.Inject;
 
@@ -89,16 +89,16 @@ public class SelectStepFragment extends Fragment {
     }
 
     public void onClickAddWidget() {
-        StringBuilder builder = new StringBuilder();
+        PrefsUtil.setWidgetTitle(getContext(), recipe.getName());
+        PrefsUtil.setWidgetRecipeId(getContext(), recipe.getId());
 
-        for (Ingredient ingredient : recipe.getIngredients()) {
-            builder.append(String.format(Locale.getDefault(), "%.1f %s %s\n",
-                    ingredient.getQuantity(), ingredient.getMeasure(), ingredient.getIngredient()));
-        }
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
+                new ComponentName(getContext(), BakingAppWidget.class));
 
-        String ingredients = builder.toString();
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_listview_ingredients);
 
-        UpdateWidgetService.startActionUpdateWidgets(getContext(), ingredients);
+        BakingAppWidget.updateAppWidget(getContext(), appWidgetManager, appWidgetIds);
     }
 
     private void populateViews() {

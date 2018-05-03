@@ -10,6 +10,8 @@
     <string name="button_add_widget">Add Widget</string>
     <string name="widget_text">Enter a recipe and click add widget button</string>
     <string name="no_internet">No internet</string>
+    <string name="pref_widget_key">pref_widget_key</string>
+    <string name="pref_title_key">pref_title_key</string>
 
     <plurals name="serving_count">
         <item quantity="zero">%1$d servings</item>

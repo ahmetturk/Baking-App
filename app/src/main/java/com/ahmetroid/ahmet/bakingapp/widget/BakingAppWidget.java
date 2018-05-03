@@ -9,33 +9,37 @@ import android.widget.RemoteViews;
 
 import com.ahmetroid.ahmet.bakingapp.R;
 import com.ahmetroid.ahmet.bakingapp.ui.MainActivity;
+import com.ahmetroid.ahmet.bakingapp.utils.PrefsUtil;
 
 /**
  * Implementation of App Widget functionality.
  */
 public class BakingAppWidget extends AppWidgetProvider {
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int[] appWidgetIds, String ingredients) {
+
+    public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+
         for (int appWidgetId : appWidgetIds) {
-            // Create an Intent to launch MainActivity when clicked
-            Intent intent = new Intent(context, MainActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+                    new Intent(context, MainActivity.class), 0);
 
-            // Construct the RemoteViews object
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
-            views.setTextViewText(R.id.widget_textview_ingredients, ingredients);
 
-            // Widgets allow click handlers to only launch pending intents
-            views.setOnClickPendingIntent(R.id.widget_textview_ingredients, pendingIntent);
+            views.setTextViewText(R.id.widget_textview_title, PrefsUtil.getWidgetTitle(context));
 
-            // Instruct the widget manager to update the widget
+            views.setRemoteAdapter(R.id.widget_listview_ingredients,
+                    BakingAppRemoteViewsService.getIntent(context));
+
+            views.setPendingIntentTemplate(R.id.widget_listview_ingredients, pendingIntent);
+
+            views.setOnClickPendingIntent(R.id.widget_parent_layout, pendingIntent);
+
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        UpdateWidgetService.startActionUpdateWidgets(context, context.getString(R.string.widget_text));
+        updateAppWidget(context, appWidgetManager, appWidgetIds);
     }
 }
 
